@@ -1,0 +1,22 @@
+<!-- Dodaj ovo u head deo index.html fajla -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container mt-4">
+  <div class="header d-flex justify-content-between align-items-center mb-4">
+    <div *ngIf="isLoggedIn; else loginRegister">
+      <span class="mr-3">{{ firstName }} {{ lastName }}</span>
+      <a routerLink="/profile" class="btn btn-outline-primary btn-sm mr-2">Profile</a>
+      <button (click)="logout()" class="btn btn-outline-danger btn-sm">Sign out</button>
+    </div>
+    <ng-template #loginRegister>
+      <button (click)="navigateToLogin()" class="btn btn-primary btn-sm mr-2">Login</button>
+      <button (click)="navigateToRegister()" class="btn btn-secondary btn-sm">Sign in</button>
+    </ng-template>
+  </div>
+
+  <h2 class="text-center mb-4">Welcome to Trello!</h2>
+
+
+
+  
+</div>
