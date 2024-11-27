@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
@@ -27,21 +28,23 @@ type User struct {
 	UpdatedAt    time.Time          `json:"updatedAt" bson:"updatedAt"`
 }
 
+var validate = validator.New()
+
 type RegisterRequest struct {
-	FirstName       string `json:"firstName"`
-	LastName        string `json:"lastName"`
-	Username        string `json:"username"`
-	Password        string `json:"password"`
-	ConfirmPassword string `json:"confirmPassword"`
-	Email           string `json:"email"`
-	Age             int    `json:"age"`
-	Country         string `json:"country"`
-	Role            string `json:"role"` // NK, M, C
+	FirstName       string `json:"firstName" validate:"required,alpha"`
+	LastName        string `json:"lastName" validate:"required,alpha"`
+	Username        string `json:"username" validate:"required,alphanum,min=3,max=20"`
+	Password        string `json:"password" validate:"required,min=8"`
+	ConfirmPassword string `json:"confirmPassword" validate:"required"`
+	Email           string `json:"email" validate:"required,email"`
+	Age             int    `json:"age" validate:"required,min=18"`
+	Country         string `json:"country" validate:"required"`
+	Role            string `json:"role" validate:"required,oneof=NK M C"`
 }
 
 type LoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
 }
 
 type LoginResponse struct {
