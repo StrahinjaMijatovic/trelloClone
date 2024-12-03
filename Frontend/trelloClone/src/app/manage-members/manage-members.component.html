@@ -1,0 +1,50 @@
+<!-- Dodaj ovo u head deo index.html fajla -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+
+<div class="container mt-5">
+    <h2 class="text-center">Manage Members</h2>
+  
+    <!-- Projekti -->
+    <div class="row">
+      <div class="col-md-4">
+        <h3>Your Projects</h3>
+        <ul class="list-group">
+          <li 
+            class="list-group-item list-group-item-action" 
+            *ngFor="let project of projects" 
+            (click)="selectProject(project)"
+            [class.active]="project === selectedProject">
+            {{ project.name }}
+          </li>
+        </ul>
+      </div>
+  
+      <!-- Detalji projekta -->
+      <div class="col-md-8" *ngIf="selectedProject">
+        <h3>Project: {{ selectedProject.name }}</h3>
+        <p><strong>Manager ID:</strong> {{ selectedProject.managerId }}</p>
+        <p><strong>Members:</strong></p>
+        <ul class="list-group">
+          <li 
+            class="list-group-item d-flex justify-content-between align-items-center" 
+            *ngFor="let member of selectedProject.members">
+            {{ member }}
+            <button class="btn btn-danger btn-sm" (click)="removeMember(member)">Remove</button>
+          </li>
+        </ul>
+  
+        <hr />
+        <h4>Add Member</h4>
+        <div class="input-group mb-3">
+          <input 
+            type="text" 
+            class="form-control" 
+            [(ngModel)]="newMemberId" 
+            placeholder="Enter Member ID" />
+          <button class="btn btn-primary" (click)="addMember()">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -11,10 +11,6 @@ export class ProjectsService {
 
   constructor(private http: HttpClient) {}
 
-  // Get all projects
-  getProjects(): Observable<Project[]> {
-    return this.http.get<Project[]>(`${this.baseUrl}`);
-  }
 
   // Get a single project
   getProjectById(id: string): Observable<Project> {
@@ -26,13 +22,29 @@ export class ProjectsService {
     return this.http.post<Project>(this.baseUrl, project);
   }
 
-  // Add a member to a project
-  addMember(projectId: string, memberId: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/${projectId}/add-member`, { memberId });
+  // // Add a member to a project
+  // addMember(projectId: string, memberId: string): Observable<any> {
+  //   return this.http.post(`${this.baseUrl}/${projectId}/add-member`, { memberId });
+  // }
+
+  // // Remove a member from a project
+  // removeMember(projectId: string, memberId: string): Observable<any> {
+  //   return this.http.post(`${this.baseUrl}/${projectId}/remove-member`, { memberId });
+  // }
+
+  getProjects(): Observable<Project[]> {
+    return this.http.get<Project[]>(this.baseUrl);
   }
 
-  // Remove a member from a project
-  removeMember(projectId: string, memberId: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/${projectId}/remove-member`, { memberId });
+  // Dodavanje člana u projekat
+  addMember(projectId: string, memberId: string, managerId: string): Observable<any> {
+    const payload = { memberId, managerId };
+    return this.http.post(`${this.baseUrl}/${projectId}/add-member`, payload);
+  }
+
+  // Uklanjanje člana iz projekta
+  removeMember(projectId: string, memberId: string, managerId: string): Observable<any> {
+    const payload = { memberId, managerId };
+    return this.http.post(`${this.baseUrl}/${projectId}/remove-member`, payload);
   }
 }

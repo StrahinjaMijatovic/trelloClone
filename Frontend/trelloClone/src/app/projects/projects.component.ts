@@ -11,11 +11,23 @@ export class ProjectsComponent implements OnInit {
   projects: Project[] = [];
   selectedProject: Project | null = null;
   newMemberId: string = '';
+  managerId: string = ''; // Dodato za čuvanje managerId
 
   constructor(private projectsService: ProjectsService) {}
 
   ngOnInit(): void {
+    this.setManagerIdFromToken();
     this.loadProjects();
+  }
+
+  private setManagerIdFromToken(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = JSON.parse(atob(token.split('.')[1])); // Dekodiranje JWT tokena
+      this.managerId = decodedToken.userID;
+    } else {
+      console.error('No token found');
+    }
   }
 
   loadProjects(): void {
@@ -31,7 +43,7 @@ export class ProjectsComponent implements OnInit {
   addMember(): void {
     if (this.selectedProject && this.newMemberId) {
       this.projectsService
-        .addMember(this.selectedProject.id, this.newMemberId)
+        .addMember(this.selectedProject.id, this.newMemberId, this.managerId) // Prosleđivanje managerId
         .subscribe(() => {
           this.selectedProject?.members.push(this.newMemberId);
           this.newMemberId = '';
@@ -42,7 +54,7 @@ export class ProjectsComponent implements OnInit {
   removeMember(memberId: string): void {
     if (this.selectedProject) {
       this.projectsService
-        .removeMember(this.selectedProject.id, memberId)
+        .removeMember(this.selectedProject.id, memberId, this.managerId) // Prosleđivanje managerId
         .subscribe(() => {
           this.selectedProject!.members = this.selectedProject!.members.filter(
             (id) => id !== memberId

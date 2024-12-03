@@ -41,6 +41,10 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/create-project']);
   }
 
+  navigateToManage() {
+    this.router.navigate(['/manage-members']);
+  }
+
   logout() {
     localStorage.removeItem('token');
     this.isLoggedIn = false;

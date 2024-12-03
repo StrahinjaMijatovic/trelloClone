@@ -9,6 +9,7 @@
       <a routerLink="/projects" class="btn btn-outline-primary btn-sm mr-2">Projects</a>
       <!-- <a routerLink="/create-project" class="btn btn-outline-primary btn-sm mr-2">Create project</a> -->
       <button *ngIf="role === 'M'" (click)="navigateToCreateProject()" class="btn btn-success">Create project</button>
+      <button *ngIf="role === 'M'" (click)="navigateToManage()" class="btn btn-success">Manage project</button>
       <button (click)="logout()" class="btn btn-outline-danger btn-sm">Sign out</button>
     </div>
     <ng-template #loginRegister>

@@ -11,6 +11,7 @@ import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
+import { ManageMembersComponent } from './manage-members/manage-members.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { CreateProjectComponent } from './create-project/create-project.componen
     RegisterComponent,
     HomeComponent,
     ProjectsComponent,
-    CreateProjectComponent
+    CreateProjectComponent,
+    ManageMembersComponent
   ],
   imports: [
     BrowserModule,
