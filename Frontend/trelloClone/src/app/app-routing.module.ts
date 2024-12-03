@@ -6,6 +6,7 @@ import { HomeComponent } from './home/home.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { ManageMembersComponent } from './manage-members/manage-members.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'projects', component: ProjectsComponent },
   { path: 'manage-members', component: ManageMembersComponent },
+  { path: 'notifications', component: NotificationsComponent },
 ];
 
 @NgModule({

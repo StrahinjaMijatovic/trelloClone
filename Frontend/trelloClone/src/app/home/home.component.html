@@ -6,7 +6,8 @@
     <div *ngIf="isLoggedIn; else loginRegister">
       <span class="mr-3">{{ firstName }} {{ lastName }}</span>
       <a routerLink="/profile" class="btn btn-outline-primary btn-sm mr-2">Profile</a>
-      <a routerLink="/projects" class="btn btn-outline-primary btn-sm mr-2">Projects</a>
+      <a routerLink="/notifications" class="btn btn-outline-primary btn-sm mr-2">Notifications</a>
+      <!-- <a routerLink="/projects" class="btn btn-outline-primary btn-sm mr-2">Projects</a> -->
       <!-- <a routerLink="/create-project" class="btn btn-outline-primary btn-sm mr-2">Create project</a> -->
       <button *ngIf="role === 'M'" (click)="navigateToCreateProject()" class="btn btn-success">Create project</button>
       <button *ngIf="role === 'M'" (click)="navigateToManage()" class="btn btn-success">Manage project</button>

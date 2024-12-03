@@ -1,0 +1,16 @@
+<div class="container mt-5">
+    <h2 class="text-center">All Notifications</h2>
+    <div *ngIf="notifications.length > 0; else noNotifications">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let notification of notifications">
+          <strong>{{ notification.message }}</strong>
+          <span class="text-muted float-end">{{ notification.createdAt | date:'medium' }}</span>
+        </li>
+      </ul>
+    </div>
+  
+    <ng-template #noNotifications>
+      <p class="text-center text-muted">No notifications available.</p>
+    </ng-template>
+  </div>
+  

@@ -12,6 +12,7 @@ import { HomeComponent } from './home/home.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { ManageMembersComponent } from './manage-members/manage-members.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ManageMembersComponent } from './manage-members/manage-members.componen
     HomeComponent,
     ProjectsComponent,
     CreateProjectComponent,
-    ManageMembersComponent
+    ManageMembersComponent,
+    NotificationsComponent
   ],
   imports: [
     BrowserModule,

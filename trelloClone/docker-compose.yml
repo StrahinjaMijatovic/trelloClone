@@ -8,6 +8,12 @@ services:
     volumes:
       - mongo-data:/data/db
 
+  cassandra:
+    image: cassandra:4.0
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+
   users-service:
     build: ./users-service
     ports:
@@ -21,6 +27,14 @@ services:
       - "8080:8080"
     depends_on:
       - mongo
+
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - cassandra
 
 volumes:
   mongo-data:
