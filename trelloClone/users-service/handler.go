@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
+	"html"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -13,10 +15,36 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+// /////////Bezbednost
+func sanitize(input string) string {
+	escaped := html.EscapeString(strings.TrimSpace(input))
+	return escaped
+}
+
+func validateAndSanitizeRegisterRequest(req *RegisterRequest) error {
+	req.FirstName = sanitize(req.FirstName)
+	req.LastName = sanitize(req.LastName)
+	req.Username = sanitize(req.Username)
+	req.Email = sanitize(req.Email)
+	req.Country = sanitize(req.Country)
+
+	return validate.Struct(req)
+}
+
+func validateAndSanitizeLoginRequest(req *LoginRequest) error {
+	req.Email = sanitize(req.Email)
+	return validate.Struct(req)
+}
+
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	var req RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, "Invalid input format", http.StatusBadRequest)
+		return
+	}
+
+	if err := validateAndSanitizeRegisterRequest(&req); err != nil {
+		http.Error(w, "Validation failed: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -88,7 +116,12 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var req LoginRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, "Invalid input format", http.StatusBadRequest)
+		return
+	}
+
+	if err := validateAndSanitizeLoginRequest(&req); err != nil {
+		http.Error(w, "Validation failed: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 

@@ -33,6 +33,14 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/register']);
   }
 
+  navigateToProjects() {
+    this.router.navigate(['/projects']);
+  }
+
+  navigateToCreateProject() {
+    this.router.navigate(['/create-project']);
+  }
+
   logout() {
     localStorage.removeItem('token');
     this.isLoggedIn = false;

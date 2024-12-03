@@ -1,0 +1,72 @@
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+
+<div class="container mt-5">
+    <h2 class="text-center">Create a New Project</h2>
+    <form (ngSubmit)="onSubmit()" #projectForm="ngForm">
+      <div class="mb-3">
+        <label for="name" class="form-label">Project Name</label>
+        <input
+          type="text"
+          id="name"
+          class="form-control"
+          [(ngModel)]="project.name"
+          name="name"
+          required
+        />
+      </div>
+  
+      <div class="mb-3">
+        <label for="endDate" class="form-label">Expected End Date</label>
+        <input
+          type="date"
+          id="endDate"
+          class="form-control"
+          [(ngModel)]="project.endDate"
+          name="endDate"
+          required
+        />
+      </div>
+  
+      <div class="mb-3">
+        <label for="minMembers" class="form-label">Minimum Members</label>
+        <input
+          type="number"
+          id="minMembers"
+          class="form-control"
+          [(ngModel)]="project.minMembers"
+          name="minMembers"
+          required
+          min="1"
+        />
+      </div>
+  
+      <div class="mb-3">
+        <label for="maxMembers" class="form-label">Maximum Members</label>
+        <input
+          type="number"
+          id="maxMembers"
+          class="form-control"
+          [(ngModel)]="project.maxMembers"
+          name="maxMembers"
+        />
+      </div>
+  
+      <div class="mb-3">
+        <label for="managerId" class="form-label">Manager ID</label>
+        <input
+          type="text"
+          id="managerId"
+          class="form-control"
+          [(ngModel)]="project.managerId"
+          name="managerId"
+          required
+        />
+      </div>
+  
+      <button type="submit" class="btn btn-primary" [disabled]="!projectForm.valid">
+        Create Project
+      </button>
+    </form>
+  </div>
+  
