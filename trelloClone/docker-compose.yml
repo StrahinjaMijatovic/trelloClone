@@ -1,3 +1,48 @@
+#version: '3.8'
+#
+#services:
+#  mongo:
+#    image: mongo:4.4
+#    ports:
+#      - "27017:27017"
+#    volumes:
+#      - mongo-data:/data/db
+#
+#  cassandra:
+#    image: cassandra:4.0
+#    container_name: cassandra
+#    ports:
+#      - "9042:9042"
+#
+#  users-service:
+#    build: ./users-service
+#    ports:
+#      - "8000:8000"
+#    depends_on:
+#      - mongo
+#
+#  projects-service:
+#    build: ./projects-service
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - mongo
+#
+#  notification-service:
+#    build: ./notification-service
+#    container_name: notification-service
+#    ports:
+#      - "8081:8081"
+#    depends_on:
+#      - cassandra
+#
+#volumes:
+#  mongo-data:
+#
+#
+#
+
+
 version: '3.8'
 
 services:
@@ -17,14 +62,19 @@ services:
   users-service:
     build: ./users-service
     ports:
-      - "8000:8000"
+      - "${USERS_SERVICE_PORT:-8000}:8000"
+    environment:
+      - MONGO_URI=${MONGO_URI}
     depends_on:
       - mongo
 
   projects-service:
     build: ./projects-service
     ports:
-      - "8080:8080"
+      - "${PROJECTS_SERVICE_PORT:-8080}:8080"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - USERS_SERVICE_URL=${USERS_SERVICE_URL}
     depends_on:
       - mongo
 
@@ -32,12 +82,30 @@ services:
     build: ./notification-service
     container_name: notification-service
     ports:
-      - "8081:8081"
+      - "${NOTIFICATIONS_SERVICE_PORT:-8081}:8081"
+    environment:
+      - CASSANDRA_HOST=${CASSANDRA_HOST}
+      - USERS_SERVICE_URL=${USERS_SERVICE_URL}
     depends_on:
       - cassandra
 
+  api-gateway:
+    image: nginx:latest
+    container_name: api-gateway
+    ports:
+      - "8085:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - users-service
+      - projects-service
+      - notification-service
+
 volumes:
   mongo-data:
+
+
+
 
 
 

@@ -56,7 +56,6 @@ export class CreateProjectComponent implements OnInit {
       return;
     }
   
-    // Ensure endDate is in ISO 8601 format
     if (this.project.endDate) {
       this.project.endDate = new Date(this.project.endDate).toISOString();
     }

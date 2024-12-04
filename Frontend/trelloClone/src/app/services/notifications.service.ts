@@ -13,7 +13,7 @@ export interface Notification {
   providedIn: 'root'
 })
 export class NotificationsService {
-  private baseUrl = 'http://localhost:8081/notifications'; // Endpoint za Notification Service
+  private baseUrl = 'http://localhost:8081/notifications'; 
 
   constructor(private http: HttpClient) {}
 

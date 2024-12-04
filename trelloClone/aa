@@ -1,0 +1,15 @@
+db.users.find().pretty()
+
+cqlsh
+INSERT INTO notifications (id, user_id, message, created_at) VALUES (uuid(), ' 674721e6293ea6dc98a27506', 'Test!', toTimestamp(now()));
+INSERT INTO notifications (id, user_id, message, created_at) VALUES (uuid(), ' 674778eada8d336bd99ab3b3', 'Test2!', toTimestamp(now()));
+
+CREATE KEYSPACE notifications WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'};
+USE notifications;
+
+CREATE TABLE notifications (
+  id UUID PRIMARY KEY,
+  user_id TEXT,
+  message TEXT,
+  created_at TIMESTAMP
+);

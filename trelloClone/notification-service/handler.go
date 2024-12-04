@@ -37,7 +37,6 @@ func GetNotificationsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Vraćanje odgovora
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(notifications)
 }

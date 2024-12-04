@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -12,7 +13,9 @@ import (
 var db *mongo.Database
 
 func ConnectDatabase() {
-	clientOptions := options.Client().ApplyURI("mongodb://mongo:27017")
+	mongoUri := os.Getenv("MONGO_URI")
+
+	clientOptions := options.Client().ApplyURI(mongoUri)
 	client, err := mongo.NewClient(clientOptions)
 	if err != nil {
 		log.Fatal(err)

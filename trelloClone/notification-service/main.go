@@ -8,12 +8,10 @@ import (
 )
 
 func main() {
-	// Povezivanje sa bazama
 	ConnectDatabase()
 	defer CloseDatabase()
 	ConnectUsersService()
 
-	// Postavljanje ruta
 	r := mux.NewRouter()
 	r.HandleFunc("/notifications", GetNotificationsHandler).Methods("GET")
 
@@ -22,7 +20,7 @@ func main() {
 
 	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"})
-	origins := handlers.AllowedOrigins([]string{"*"}) // Dozvoli sve origin-e; za specifične origin-e, koristi {"http://localhost:4200"}
+	origins := handlers.AllowedOrigins([]string{"*"})
 
 	log.Println("Server started on :8081")
 	log.Fatal(http.ListenAndServe(":8081", handlers.CORS(headers, methods, origins)(r)))

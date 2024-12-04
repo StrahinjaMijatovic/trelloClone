@@ -12,7 +12,7 @@ type Claims struct {
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
 	Role      Role   `json:"role"`
-	UserID    string `json:"userID"` // Add this line
+	UserID    string `json:"userID"`
 	jwt.StandardClaims
 }
 

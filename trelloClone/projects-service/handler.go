@@ -19,9 +19,8 @@ func CreateProjectHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Validation
 	project.ID = primitive.NewObjectID()
-	project.Members = []string{} // Inicijalizujte members kao prazan niz
+	project.Members = []string{}
 	project.CreatedAt = time.Now()
 	project.UpdatedAt = time.Now()
 
@@ -46,7 +45,6 @@ func AddMemberHandler(w http.ResponseWriter, r *http.Request) {
 		ManagerID string `json:"managerId"`
 	}
 
-	// Log request payload
 	log.Printf("AddMemberHandler called with projectID: %s", projectID)
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -61,49 +59,47 @@ func AddMemberHandler(w http.ResponseWriter, r *http.Request) {
 
 	projectObjectID, err := primitive.ObjectIDFromHex(projectID)
 	if err != nil {
-		log.Printf("Invalid project ID: %v", err)
-		http.Error(w, "Invalid project ID", http.StatusBadRequest)
+		log.Printf("ID projekta ne vazi: %v", err)
+		http.Error(w, "ID projekta ne vazi", http.StatusBadRequest)
 		return
 	}
 
 	var project Project
 	if err := collection.FindOne(ctx, bson.M{"_id": projectObjectID}).Decode(&project); err != nil {
-		log.Printf("Project not found: %v", err)
-		http.Error(w, "Project not found", http.StatusNotFound)
+		log.Printf("Projekat nije pronadjen: %v", err)
+		http.Error(w, "Projekat nije pronadjen", http.StatusNotFound)
 		return
 	}
 
-	// Log project data
-	log.Printf("Project found: %+v", project)
+	log.Printf("Projekat pronadjen: %+v", project)
 
-	// Validations
+	// Validacije
 	if project.ManagerID != req.ManagerID {
-		log.Printf("Unauthorized access by ManagerID: %s", req.ManagerID)
-		http.Error(w, "You are not authorized to manage this project", http.StatusForbidden)
+		log.Printf("Autorizacija menadzera ne uspesna: %s", req.ManagerID)
+		http.Error(w, "Autorizacija menadzera ne uspesna", http.StatusForbidden)
 		return
 	}
 
 	if project.EndDate.Before(time.Now()) {
-		log.Printf("Cannot add members to a completed project")
-		http.Error(w, "Cannot add members to a completed project", http.StatusBadRequest)
+		log.Printf("Nije moguce dodati clanove na gotov projekat")
+		http.Error(w, "Nije moguce dodati clanove na gotov projekat", http.StatusBadRequest)
 		return
 	}
 
 	if len(project.Members) >= project.MaxMembers {
-		log.Printf("Project is at maximum capacity")
-		http.Error(w, "Project is at maximum capacity", http.StatusBadRequest)
+		log.Printf("Projekat je na maximalnom kapacitetu")
+		http.Error(w, "Projekat je na maximalnom kapacitetu", http.StatusBadRequest)
 		return
 	}
 
 	for _, member := range project.Members {
 		if member == req.MemberID {
-			log.Printf("Member already added: %s", req.MemberID)
-			http.Error(w, "Member already added", http.StatusBadRequest)
+			log.Printf("Clan je vec dodat: %s", req.MemberID)
+			http.Error(w, "Clan je vec dodat", http.StatusBadRequest)
 			return
 		}
 	}
 
-	// Update project
 	update := bson.M{"$push": bson.M{"members": req.MemberID}, "$set": bson.M{"updated_at": time.Now()}}
 	_, err = collection.UpdateOne(ctx, bson.M{"_id": projectObjectID}, update)
 	if err != nil {
@@ -112,7 +108,6 @@ func AddMemberHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Success
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode("Member added successfully")
 }
@@ -121,7 +116,7 @@ func RemoveMemberHandler(w http.ResponseWriter, r *http.Request) {
 	projectID := mux.Vars(r)["id"]
 	var req struct {
 		MemberID  string `json:"memberId"`
-		ManagerID string `json:"managerId"` // ID menadžera koji vrši zahtev
+		ManagerID string `json:"managerId"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -145,17 +140,11 @@ func RemoveMemberHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Proverite da li je zahtev poslat od menadžera projekta
 	if project.ManagerID != req.ManagerID {
 		http.Error(w, "You are not authorized to manage this project", http.StatusForbidden)
 		return
 	}
 
-	// Proverite da li član nije dodeljen zadacima u izradi (simulacija)
-	// TODO: Implement real task validation logic
-	// Primer: var tasks []Task => Proverite task.status != "In Progress"
-
-	// Proverite da li je član deo projekta
 	memberExists := false
 	for _, member := range project.Members {
 		if member == req.MemberID {
@@ -168,7 +157,6 @@ func RemoveMemberHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Uklonite člana
 	update := bson.M{"$pull": bson.M{"members": req.MemberID}, "$set": bson.M{"updated_at": time.Now()}}
 	_, err = collection.UpdateOne(ctx, bson.M{"_id": projectObjectID}, update)
 	if err != nil {
@@ -186,7 +174,6 @@ func GetProjectsHandler(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	// Preuzimanje svih projekata
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -200,7 +187,6 @@ func GetProjectsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Slanje odgovora kao JSON
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(projects)
 }

@@ -13,7 +13,7 @@ type Project struct {
 	MinMembers int                `json:"minMembers" bson:"min_members"`
 	MaxMembers int                `json:"maxMembers" bson:"max_members"`
 	ManagerID  string             `json:"managerId" bson:"manager_id"`
-	Members    []string           `json:"members" bson:"members"` // List of user IDs
+	Members    []string           `json:"members" bson:"members"`
 	CreatedAt  time.Time          `json:"createdAt" bson:"created_at"`
 	UpdatedAt  time.Time          `json:"updatedAt" bson:"updated_at"`
 }
